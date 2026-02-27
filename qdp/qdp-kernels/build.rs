@@ -63,18 +63,18 @@ fn main() {
     // Priority: CUDA_PATH env var > /usr/local/cuda (default Linux location)
     let cuda_path = env::var("CUDA_PATH").unwrap_or_else(|_| "/usr/local/cuda".to_string());
 
-    println!("cargo:rustc-link-search=native={}/lib64", cuda_path);
+    println!("cargo:rustc-link-search=native={cuda_path}/lib64");
     println!("cargo:rustc-link-lib=cudart");
 
     // On macOS, also check /usr/local/cuda/lib
     #[cfg(target_os = "macos")]
-    println!("cargo:rustc-link-search=native={}/lib", cuda_path);
+    println!("cargo:rustc-link-search=native={cuda_path}/lib");
 
     // Compile CUDA kernels
     // This uses cc crate's CUDA support to invoke nvcc
     let mut build = cc::Build::new();
 
-    build.include(format!("{}/include", cuda_path));
+    build.include(format!("{cuda_path}/include"));
     build.include("src"); // Include src directory for kernel_config.h
 
     build

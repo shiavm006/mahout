@@ -23,9 +23,9 @@ use super::QuantumEncoder;
 #[cfg(target_os = "linux")]
 use crate::error::cuda_error_to_string;
 use crate::error::{MahoutError, Result};
+use crate::gpu::memory::GpuStateVector;
 #[cfg(target_os = "linux")]
 use crate::gpu::memory::Precision;
-use crate::gpu::memory::GpuStateVector;
 use cudarc::driver::CudaDevice;
 use std::sync::Arc;
 
