@@ -162,10 +162,10 @@ pub fn get_encoder(name: &str) -> Result<Box<dyn QuantumEncoder>> {
     let name_lower = name.to_lowercase();
 
     // Check for ZZFeatureMap variants first (they have configurable suffixes)
-    if name_lower.starts_with("zzfeaturemap") || name_lower.starts_with("zz_feature_map") {
-        if let Some(encoder) = parse_zzfeaturemap_config(name) {
-            return Ok(Box::new(encoder));
-        }
+    if (name_lower.starts_with("zzfeaturemap") || name_lower.starts_with("zz_feature_map"))
+        && let Some(encoder) = parse_zzfeaturemap_config(name)
+    {
+        return Ok(Box::new(encoder));
     }
 
     match name_lower.as_str() {

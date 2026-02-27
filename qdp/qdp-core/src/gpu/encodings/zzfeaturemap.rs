@@ -61,7 +61,13 @@ impl ZZEntanglement {
     /// Number of entangled pairs for this pattern
     pub fn num_pairs(&self, num_qubits: usize) -> usize {
         match self {
-            Self::Full => num_qubits * (num_qubits - 1) / 2,
+            Self::Full => {
+                if num_qubits > 1 {
+                    num_qubits * (num_qubits - 1) / 2
+                } else {
+                    0
+                }
+            }
             Self::Linear => {
                 if num_qubits > 1 {
                     num_qubits - 1
@@ -305,10 +311,10 @@ pub fn parse_zzfeaturemap_config(name: &str) -> Option<ZZFeatureMapEncoder> {
     for part in parts {
         if let Some(ent) = ZZEntanglement::from_str(part) {
             entanglement = ent;
-        } else if let Some(r) = part.strip_prefix("reps") {
-            if let Ok(r_val) = r.parse::<usize>() {
-                reps = r_val;
-            }
+        } else if let Some(r) = part.strip_prefix("reps")
+            && let Ok(r_val) = r.parse::<usize>()
+        {
+            reps = r_val;
         }
     }
 
