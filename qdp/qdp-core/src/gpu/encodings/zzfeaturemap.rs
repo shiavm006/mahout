@@ -49,7 +49,7 @@ pub enum ZZEntanglement {
 
 impl ZZEntanglement {
     /// Parse entanglement pattern from string
-    pub fn from_str(s: &str) -> Option<Self> {
+    pub fn parse(s: &str) -> Option<Self> {
         match s.to_lowercase().as_str() {
             "full" => Some(Self::Full),
             "linear" => Some(Self::Linear),
@@ -68,13 +68,7 @@ impl ZZEntanglement {
                     0
                 }
             }
-            Self::Linear => {
-                if num_qubits > 1 {
-                    num_qubits - 1
-                } else {
-                    0
-                }
-            }
+            Self::Linear => num_qubits.saturating_sub(1),
             Self::Circular => {
                 if num_qubits > 1 {
                     num_qubits
@@ -309,7 +303,7 @@ pub fn parse_zzfeaturemap_config(name: &str) -> Option<ZZFeatureMapEncoder> {
         .collect();
 
     for part in parts {
-        if let Some(ent) = ZZEntanglement::from_str(part) {
+        if let Some(ent) = ZZEntanglement::parse(part) {
             entanglement = ent;
         } else if let Some(r) = part.strip_prefix("reps")
             && let Ok(r_val) = r.parse::<usize>()
